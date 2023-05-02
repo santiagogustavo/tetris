@@ -11,6 +11,7 @@ type State = {
   rotation: number;
   positionX: number;
   positionY: number;
+  gameOver: boolean;
 };
 
 export const useGameStore = defineStore({
@@ -21,6 +22,7 @@ export const useGameStore = defineStore({
     rotation: 0,
     positionX: 0,
     positionY: 0,
+    gameOver: false,
   }),
   actions: {
     setCurrentBlock(block: any) {
@@ -28,6 +30,9 @@ export const useGameStore = defineStore({
       this.rotation = 0;
       this.positionX = this.board[0].length / 2;
       this.positionY = 0;
+    },
+    setGameOver(gameOver: boolean) {
+      this.gameOver = gameOver;
     },
     copyShadowToBoard(shadow: any) {
       this.board = shadow;

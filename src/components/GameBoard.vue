@@ -14,6 +14,7 @@ import IBlock from '@/components/Tetrominos/IBlock.vue';
 
 import { useGameStore } from '@/stores/game';
 import { checkCollision } from '@/utils/block';
+import { playLandSound } from '@/utils/sfx';
 
 const board = computed(() => useGameStore().board);
 const currentBlock = computed(() => useGameStore().currentBlock);
@@ -53,11 +54,18 @@ watch(
   () => shadowBoard.value,
   (next: any) => {
     if (checkCollision(next, currentBlock.value, positionX.value, positionY.value)) {
-      useGameStore().copyShadowToBoard(next);
-      useGameStore().setCurrentBlock([
-        [0, 1, 1],
-        [1, 1, 0],
-      ]);
+      playLandSound();
+
+      if (positionY.value != 0) {
+        useGameStore().copyShadowToBoard(next);
+        useGameStore().setCurrentBlock([
+          [0, 1, 1],
+          [1, 1, 0],
+        ]);
+      } else {
+        console.log('game over');
+        useGameStore().setGameOver(true);
+      }
     }
   }
 );
