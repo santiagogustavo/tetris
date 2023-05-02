@@ -7,6 +7,7 @@ import { onBeforeUnmount, onMounted, computed, watch } from 'vue';
 import GameBoard from '@/components/GameBoard.vue';
 import { useGameStore } from '@/stores/game';
 import { playMoveSound, playRotateSound } from '@/utils/sfx';
+import { getRandomBlock } from './data/tetrominos';
 
 let timeout: any = undefined;
 
@@ -49,7 +50,7 @@ const clearBlockDownTimeout = () => {
 };
 
 onMounted(() => {
-  useGameStore().setCurrentBlock([[1], [1], [1], [1]]);
+  useGameStore().setCurrentBlock(getRandomBlock());
   handleBlockDownTimeout();
   window.addEventListener('keydown', handleKeyDown);
 });
