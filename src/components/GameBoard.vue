@@ -7,29 +7,34 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 import EmptyBlock from '@/components/Tetrominos/EmptyBlock.vue';
 import IBlock from '@/components/Tetrominos/IBlock.vue';
 
 import { useGameStore } from '@/stores/game';
+import { checkCollision } from '@/utils/block';
 
 const board = computed(() => useGameStore().board);
 const currentBlock = computed(() => useGameStore().currentBlock);
 const positionX = computed(() => useGameStore().positionX);
 const positionY = computed(() => useGameStore().positionY);
 const shadowBoard = computed(() => {
+  if (!currentBlock.value) {
+    return board.value;
+  }
+
   let shadow = JSON.parse(JSON.stringify(board.value));
 
-  if (currentBlock.value) {
-    currentBlock.value?.forEach((row: any, i: number) => {
-      row.forEach((col: number, j: number) => {
-        let x = Number(positionY.value) + i;
-        let y = Number(positionX.value) + j;
+  currentBlock.value?.forEach((row: any, i: number) => {
+    row.forEach((col: number, j: number) => {
+      let x = Number(positionY.value) + i;
+      let y = Number(positionX.value) + j;
+      if (col != 0) {
         shadow[x][y] = col;
-      });
+      }
     });
-  }
+  });
 
   return shadow;
 });
@@ -43,6 +48,19 @@ const getBlockType = (type: number) => {
       return EmptyBlock;
   }
 };
+
+watch(
+  () => shadowBoard.value,
+  (next: any) => {
+    if (checkCollision(next, currentBlock.value, positionX.value, positionY.value)) {
+      useGameStore().copyShadowToBoard(next);
+      useGameStore().setCurrentBlock([
+        [0, 1, 1],
+        [1, 1, 0],
+      ]);
+    }
+  }
+);
 </script>
 
 <style lang="scss">

@@ -1,9 +1,9 @@
 import { createMatrix, rotateMatrix } from '@/utils/matrix';
 import { defineStore } from 'pinia';
 
-const BOARD_LEFT_CONSTRAINT = 0;
-const BOARD_RIGHT_CONSTRAINT = 9;
-const BOARD_BOTTOM_CONSTRAINT = 17;
+export const BOARD_LEFT_CONSTRAINT = 0;
+export const BOARD_RIGHT_CONSTRAINT = 9;
+export const BOARD_BOTTOM_CONSTRAINT = 17;
 
 type State = {
   board: any;
