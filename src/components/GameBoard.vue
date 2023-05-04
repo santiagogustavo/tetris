@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed, onBeforeUnmount, watch } from 'vue';
 
 import EmptyBlock from '@/components/Tetrominos/EmptyBlock.vue';
 import IBlock from '@/components/Tetrominos/IBlock.vue';
@@ -19,14 +19,17 @@ import TBlock from '@/components/Tetrominos/TBlock.vue';
 import ZBlock from '@/components/Tetrominos/ZBlock.vue';
 
 import { useGameStore } from '@/stores/game';
-import { checkCollision } from '@/utils/block';
+import { checkBottomCollision } from '@/utils/block';
 import { playLandSound } from '@/utils/sfx';
 import { getRandomBlock } from '@/data/tetrominos';
+
+let timeout: any = undefined;
 
 const board = computed(() => useGameStore().board);
 const currentBlock = computed(() => useGameStore().currentBlock);
 const positionX = computed(() => useGameStore().positionX);
 const positionY = computed(() => useGameStore().positionY);
+const currentSpeed = computed(() => useGameStore().currentSpeed);
 const shadowBoard = computed(() => {
   if (!currentBlock.value) {
     return board.value;
@@ -72,12 +75,18 @@ const getBlockType = (type: number) => {
 watch(
   () => shadowBoard.value,
   (next: any) => {
-    if (checkCollision(next, currentBlock.value, positionX.value, positionY.value)) {
+    if (timeout) {
+      return;
+    }
+    if (checkBottomCollision(next, currentBlock.value, positionX.value, positionY.value)) {
       playLandSound();
 
       if (positionY.value != 0) {
-        useGameStore().copyShadowToBoard(next);
-        useGameStore().setCurrentBlock(getRandomBlock());
+        timeout = setTimeout(() => {
+          useGameStore().copyShadowToBoard(shadowBoard.value);
+          useGameStore().setCurrentBlock(getRandomBlock());
+          timeout = undefined;
+        }, currentSpeed.value);
       } else {
         console.log('game over');
         useGameStore().setGameOver(true);
@@ -85,6 +94,12 @@ watch(
     }
   }
 );
+
+onBeforeUnmount(() => {
+  if (timeout) {
+    clearTimeout(timeout);
+  }
+});
 </script>
 
 <style lang="scss">

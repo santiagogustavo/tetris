@@ -12,6 +12,7 @@ type State = {
   positionX: number;
   positionY: number;
   gameOver: boolean;
+  currentSpeed: number;
 };
 
 export const useGameStore = defineStore({
@@ -23,6 +24,7 @@ export const useGameStore = defineStore({
     positionX: 0,
     positionY: 0,
     gameOver: false,
+    currentSpeed: 1000,
   }),
   actions: {
     setCurrentBlock(block: any) {

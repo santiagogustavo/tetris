@@ -8,28 +8,72 @@ import GameBoard from '@/components/GameBoard.vue';
 import { useGameStore } from '@/stores/game';
 import { playMoveSound, playRotateSound } from '@/utils/sfx';
 import { getRandomBlock } from './data/tetrominos';
+import {
+  checkLeftCollision,
+  checkRightCollision,
+  checkBottomCollision,
+  checkRotationClockwiseCollision,
+} from './utils/block';
 
 let timeout: any = undefined;
 
+const board = computed(() => useGameStore().board);
+const currentBlock = computed(() => useGameStore().currentBlock);
+const positionX = computed(() => useGameStore().positionX);
+const positionY = computed(() => useGameStore().positionY);
 const isGameOver = computed(() => useGameStore().gameOver);
+const currentSpeed = computed(() => useGameStore().currentSpeed);
+
+const moveLeft = () => {
+  if (!checkLeftCollision(board.value, currentBlock.value, positionX.value, positionY.value)) {
+    playMoveSound();
+    useGameStore().moveLeft();
+  }
+};
+
+const moveRight = () => {
+  if (!checkRightCollision(board.value, currentBlock.value, positionX.value, positionY.value)) {
+    playMoveSound();
+    useGameStore().moveRight();
+  }
+};
+
+const moveDown = (withSound = true) => {
+  if (!checkBottomCollision(board.value, currentBlock.value, positionX.value, positionY.value)) {
+    if (withSound) {
+      playMoveSound();
+    }
+    useGameStore().moveDown();
+  }
+};
+
+const rotate = () => {
+  if (
+    !checkRotationClockwiseCollision(
+      board.value,
+      currentBlock.value,
+      positionX.value,
+      positionY.value
+    )
+  ) {
+    playRotateSound();
+    useGameStore().rotateClockwise();
+  }
+};
 
 const handleKeyDown = (event: KeyboardEvent) => {
   switch (event.key) {
     case 'ArrowLeft':
-      playMoveSound();
-      useGameStore().moveLeft();
+      moveLeft();
       return;
     case 'ArrowRight':
-      playMoveSound();
-      useGameStore().moveRight();
+      moveRight();
       return;
     case 'ArrowDown':
-      playMoveSound();
-      useGameStore().moveDown();
+      moveDown();
       return;
     case 'ArrowUp':
-      playRotateSound();
-      useGameStore().rotateClockwise();
+      rotate();
       return;
     default:
       return;
@@ -38,9 +82,9 @@ const handleKeyDown = (event: KeyboardEvent) => {
 
 const handleBlockDownTimeout = () => {
   timeout = setTimeout(() => {
-    useGameStore().moveDown();
+    moveDown(false);
     handleBlockDownTimeout();
-  }, 1000);
+  }, currentSpeed.value);
 };
 
 const clearBlockDownTimeout = () => {
