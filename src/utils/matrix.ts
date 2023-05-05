@@ -12,3 +12,28 @@ export const rotateMatrix = (matrix: number[][]) => {
 
   return rotatedMatrix;
 };
+
+export const generateShadowBoard = (
+  board: number[][],
+  currentBlock: number[][],
+  positionX: number,
+  positionY: number
+) => {
+  if (!currentBlock) {
+    return board;
+  }
+
+  const shadow = JSON.parse(JSON.stringify(board));
+
+  currentBlock?.forEach((row: any, i: number) => {
+    row.forEach((col: number, j: number) => {
+      const x = positionY + i;
+      const y = positionX + j;
+      if (col != 0) {
+        shadow[x][y] = col;
+      }
+    });
+  });
+
+  return shadow;
+};

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, watch } from 'vue';
+import { computed } from 'vue';
 
 import EmptyBlock from '@/components/Tetrominos/EmptyBlock.vue';
 import IBlock from '@/components/Tetrominos/IBlock.vue';
@@ -19,36 +19,8 @@ import TBlock from '@/components/Tetrominos/TBlock.vue';
 import ZBlock from '@/components/Tetrominos/ZBlock.vue';
 
 import { useGameStore } from '@/stores/game';
-import { checkBottomCollision } from '@/utils/block';
-import { playLandSound } from '@/utils/sfx';
-import { getRandomBlock } from '@/data/tetrominos';
 
-let timeout: any = undefined;
-
-const board = computed(() => useGameStore().board);
-const currentBlock = computed(() => useGameStore().currentBlock);
-const positionX = computed(() => useGameStore().positionX);
-const positionY = computed(() => useGameStore().positionY);
-const currentSpeed = computed(() => useGameStore().currentSpeed);
-const shadowBoard = computed(() => {
-  if (!currentBlock.value) {
-    return board.value;
-  }
-
-  let shadow = JSON.parse(JSON.stringify(board.value));
-
-  currentBlock.value?.forEach((row: any, i: number) => {
-    row.forEach((col: number, j: number) => {
-      let x = Number(positionY.value) + i;
-      let y = Number(positionX.value) + j;
-      if (col != 0) {
-        shadow[x][y] = col;
-      }
-    });
-  });
-
-  return shadow;
-});
+const shadowBoard = computed(() => useGameStore().shadowBoard);
 
 const getBlockType = (type: number) => {
   switch (type) {
@@ -71,35 +43,6 @@ const getBlockType = (type: number) => {
       return EmptyBlock;
   }
 };
-
-watch(
-  () => shadowBoard.value,
-  (next: any) => {
-    if (timeout) {
-      return;
-    }
-    if (checkBottomCollision(next, currentBlock.value, positionX.value, positionY.value)) {
-      playLandSound();
-
-      if (positionY.value != 0) {
-        timeout = setTimeout(() => {
-          useGameStore().copyShadowToBoard(shadowBoard.value);
-          useGameStore().setCurrentBlock(getRandomBlock());
-          timeout = undefined;
-        }, currentSpeed.value);
-      } else {
-        console.log('game over');
-        useGameStore().setGameOver(true);
-      }
-    }
-  }
-);
-
-onBeforeUnmount(() => {
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-});
 </script>
 
 <style lang="scss">

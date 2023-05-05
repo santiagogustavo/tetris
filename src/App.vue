@@ -6,7 +6,7 @@
 import { onBeforeUnmount, onMounted, computed, watch } from 'vue';
 import GameBoard from '@/components/GameBoard.vue';
 import { useGameStore } from '@/stores/game';
-import { playMoveSound, playRotateSound } from '@/utils/sfx';
+import { playMoveSound, playRotateSound, playLandSound } from '@/utils/sfx';
 import { getRandomBlock } from './data/tetrominos';
 import {
   checkLeftCollision,
@@ -18,6 +18,7 @@ import {
 let timeout: any = undefined;
 
 const board = computed(() => useGameStore().board);
+const shadowBoard = computed(() => useGameStore().shadowBoard);
 const currentBlock = computed(() => useGameStore().currentBlock);
 const positionX = computed(() => useGameStore().positionX);
 const positionY = computed(() => useGameStore().positionY);
@@ -44,6 +45,16 @@ const moveDown = (withSound = true) => {
       playMoveSound();
     }
     useGameStore().moveDown();
+  } else {
+    playLandSound();
+
+    if (positionY.value != 0) {
+      useGameStore().copyShadowToBoard(shadowBoard.value);
+      useGameStore().setCurrentBlock(getRandomBlock());
+    } else {
+      console.log('game over');
+      useGameStore().setGameOver(true);
+    }
   }
 };
 

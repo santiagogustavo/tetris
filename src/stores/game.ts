@@ -1,4 +1,4 @@
-import { createMatrix, rotateMatrix } from '@/utils/matrix';
+import { createMatrix, generateShadowBoard, rotateMatrix } from '@/utils/matrix';
 import { defineStore } from 'pinia';
 
 export const BOARD_LEFT_CONSTRAINT = 0;
@@ -79,6 +79,11 @@ export const useGameStore = defineStore({
       if (!this.currentBlock) return;
       this.positionY++;
       useGameStore().compensateDownMovement();
+    },
+  },
+  getters: {
+    shadowBoard(state) {
+      return generateShadowBoard(state.board, state.currentBlock, state.positionX, state.positionY);
     },
   },
 });
