@@ -1,18 +1,20 @@
 <template>
-  <div
-    v-touch:swipe.left="moveLeft"
-    v-touch:swipe.right="moveRight"
-    v-touch:swipe.top="rotate"
-    v-touch:swipe.bottom="moveDown"
-    class="app"
-  >
+  <div class="app">
     <GameBoard />
+    <ControlsGameBoy
+      @up="rotate"
+      @down="moveDown"
+      @left="moveLeft"
+      @right="moveRight"
+      @b="rotate"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, computed, watch } from 'vue';
 import GameBoard from '@/components/GameBoard.vue';
+import ControlsGameBoy from '@/components/Controls/GameBoy.vue';
 import { useGameStore } from '@/stores/game';
 import {
   playMoveSound,
@@ -157,5 +159,8 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  max-width: fit-content;
 }
 </style>
