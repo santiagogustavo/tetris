@@ -1,19 +1,28 @@
 <template>
-  <GameBoard />
+  <div class="app">
+    <GameBoard />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, computed, watch } from 'vue';
 import GameBoard from '@/components/GameBoard.vue';
 import { useGameStore } from '@/stores/game';
-import { playMoveSound, playRotateSound, playLandSound } from '@/utils/sfx';
-import { getRandomBlock } from './data/tetrominos';
+import {
+  playMoveSound,
+  playRotateSound,
+  playLandSound,
+  playLineClearSound,
+  playGameOverSound,
+} from '@/utils/sfx';
+import { getRandomBlock } from '@/data/tetrominos';
 import {
   checkLeftCollision,
   checkRightCollision,
   checkBottomCollision,
   checkRotationClockwiseCollision,
-} from './utils/block';
+} from '@/utils/block';
+import { blowLines, detectLines } from '@/utils/matrix';
 
 let timeout: any = undefined;
 
@@ -49,11 +58,18 @@ const moveDown = (withSound = true) => {
     playLandSound();
 
     if (positionY.value != 0) {
-      useGameStore().copyShadowToBoard(shadowBoard.value);
+      const lines = detectLines(shadowBoard.value);
+
+      if (lines.length) {
+        useGameStore().copyShadowToBoard(blowLines(shadowBoard.value, lines));
+        playLineClearSound();
+      } else {
+        useGameStore().copyShadowToBoard(shadowBoard.value);
+      }
       useGameStore().setCurrentBlock(getRandomBlock());
     } else {
-      console.log('game over');
       useGameStore().setGameOver(true);
+      playGameOverSound();
     }
   }
 };
@@ -128,3 +144,12 @@ watch(
   }
 );
 </script>
+
+<style lang="scss">
+.app {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

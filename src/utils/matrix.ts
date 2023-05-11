@@ -37,3 +37,39 @@ export const generateShadowBoard = (
 
   return shadow;
 };
+
+export const detectLines = (matrix: number[][]) => {
+  let lines: number[] = [];
+
+  matrix.forEach((line: number[], index: number) => {
+    let isLineFull = true;
+
+    line.forEach((value: number) => {
+      if (value === 0) {
+        isLineFull = false;
+      }
+    });
+
+    if (isLineFull) {
+      lines = [...lines, index];
+    }
+  });
+
+  return lines;
+};
+
+export const blowLines = (matrix: number[][], lines: number[]) => {
+  const emptyLine = Array.apply(null, Array(matrix[0].length)).map(() => 0);
+  const descendingLines = lines.sort().reverse();
+  let blownMatrix = JSON.parse(JSON.stringify(matrix));
+
+  descendingLines.forEach((line: number) => {
+    blownMatrix.splice(line, 1);
+  });
+
+  descendingLines.forEach(() => {
+    blownMatrix = [emptyLine, ...blownMatrix];
+  });
+
+  return blownMatrix;
+};
