@@ -1,5 +1,11 @@
 <template>
-  <div class="app">
+  <div
+    v-touch:swipe.left="moveLeft"
+    v-touch:swipe.right="moveRight"
+    v-touch:swipe.top="rotate"
+    v-touch:swipe.bottom="moveDown"
+    class="app"
+  >
     <GameBoard />
   </div>
 </template>

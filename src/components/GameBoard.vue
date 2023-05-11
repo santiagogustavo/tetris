@@ -47,6 +47,8 @@ const getBlockType = (type: number) => {
 
 <style lang="scss">
 .game-board {
+  pointer-events: none;
+  user-select: none;
   &__row {
     display: flex;
   }
