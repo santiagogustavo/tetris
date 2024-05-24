@@ -1,5 +1,7 @@
 <template>
   <div class="app">
+    <GameHeader />
+    <GameOverScreen v-if="isGameOver" />
     <GameBoard />
     <ControlsGameBoy
       @up="rotate"
@@ -13,7 +15,9 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, computed, watch } from 'vue';
+import GameHeader from '@/components/GameHeader.vue';
 import GameBoard from '@/components/GameBoard.vue';
+import GameOverScreen from '@/components/GameOverScreen.vue';
 import ControlsGameBoy from '@/components/Controls/GameBoy.vue';
 import { useGameStore } from '@/stores/game';
 import {
@@ -40,6 +44,8 @@ const currentBlock = computed(() => useGameStore().currentBlock);
 const positionX = computed(() => useGameStore().positionX);
 const positionY = computed(() => useGameStore().positionY);
 const isGameOver = computed(() => useGameStore().gameOver);
+const score = computed(() => useGameStore().score);
+const level = computed(() => useGameStore().level);
 const currentSpeed = computed(() => useGameStore().currentSpeed);
 
 const moveLeft = () => {
@@ -69,6 +75,7 @@ const moveDown = (withSound = true) => {
       const lines = detectLines(shadowBoard.value);
 
       if (lines.length) {
+        useGameStore().addToScore(lines.length);
         useGameStore().copyShadowToBoard(blowLines(shadowBoard.value, lines));
         playLineClearSound();
       } else {
@@ -139,22 +146,26 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeyDown);
 });
 
-watch(
-  () => isGameOver.value,
-  next => {
-    if (next) {
-      clearBlockDownTimeout();
-      window.removeEventListener('keydown', handleKeyDown);
-    } else {
-      handleBlockDownTimeout();
-      window.addEventListener('keydown', handleKeyDown);
-    }
+watch(isGameOver, next => {
+  if (next) {
+    clearBlockDownTimeout();
+    window.removeEventListener('keydown', handleKeyDown);
+  } else {
+    handleBlockDownTimeout();
+    window.addEventListener('keydown', handleKeyDown);
   }
-);
+});
+
+watch(score, next => {
+  if (next >= level.value * 10) {
+    useGameStore().levelUp();
+  }
+});
 </script>
 
 <style lang="scss">
 .app {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

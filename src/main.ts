@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import Vue3TouchEvents from 'vue3-touch-events';
 
 import './style.css';
+import '@/assets/fonts/_fonts.scss';
 import App from './App.vue';
 
 const app = createApp(App);

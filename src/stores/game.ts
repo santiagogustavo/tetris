@@ -1,3 +1,4 @@
+import { getRandomBlock } from '@/data/tetrominos';
 import { createMatrix, generateShadowBoard, rotateMatrix } from '@/utils/matrix';
 import { defineStore } from 'pinia';
 
@@ -12,7 +13,8 @@ type State = {
   positionX: number;
   positionY: number;
   gameOver: boolean;
-  currentSpeed: number;
+  score: number;
+  level: number;
 };
 
 export const useGameStore = defineStore({
@@ -24,9 +26,16 @@ export const useGameStore = defineStore({
     positionX: 0,
     positionY: 0,
     gameOver: false,
-    currentSpeed: 1000,
+    score: 0,
+    level: 1,
   }),
   actions: {
+    addToScore(lines: number) {
+      this.score = this.score + lines;
+    },
+    levelUp() {
+      this.level = this.level + 1;
+    },
     setCurrentBlock(block: any) {
       this.currentBlock = block;
       this.rotation = 0;
@@ -80,8 +89,18 @@ export const useGameStore = defineStore({
       this.positionY++;
       useGameStore().compensateDownMovement();
     },
+    resetGame() {
+      this.setCurrentBlock(getRandomBlock());
+      this.gameOver = false;
+      this.score = 0;
+      this.level = 1;
+      this.board = createMatrix(18, 10);
+    },
   },
   getters: {
+    currentSpeed(state) {
+      return 1000 - (state.level - 1) * 10;
+    },
     shadowBoard(state) {
       return generateShadowBoard(state.board, state.currentBlock, state.positionX, state.positionY);
     },
