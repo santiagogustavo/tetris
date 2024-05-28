@@ -8,7 +8,6 @@ import LBlockPng from '@/assets/imgs/lblock.png';
 
 <style lang="scss">
 .l-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

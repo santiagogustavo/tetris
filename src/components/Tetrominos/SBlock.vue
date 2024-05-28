@@ -8,7 +8,6 @@ import SBlockPng from '@/assets/imgs/sblock.png';
 
 <style lang="scss">
 .s-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

@@ -8,7 +8,6 @@ import IBlockPng from '@/assets/imgs/iblock.png';
 
 <style lang="scss">
 .i-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

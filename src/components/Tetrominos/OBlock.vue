@@ -8,7 +8,6 @@ import OBlockPng from '@/assets/imgs/oblock.png';
 
 <style lang="scss">
 .o-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

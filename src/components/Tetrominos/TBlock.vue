@@ -8,7 +8,6 @@ import TBlockPng from '@/assets/imgs/tblock.png';
 
 <style lang="scss">
 .t-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

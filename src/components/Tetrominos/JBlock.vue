@@ -8,7 +8,6 @@ import JBlockPng from '@/assets/imgs/jblock.png';
 
 <style lang="scss">
 .j-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>

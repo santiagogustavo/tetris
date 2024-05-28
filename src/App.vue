@@ -171,5 +171,12 @@ watch(score, next => {
   justify-content: center;
   flex-direction: column;
   max-width: fit-content;
+
+  @media screen and (max-width: 768px) {
+    justify-content: space-between;
+    width: 100vw;
+    height: 100vh;
+    max-width: initial;
+  }
 }
 </style>

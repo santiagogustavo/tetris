@@ -4,8 +4,7 @@
 
 <style lang="scss">
 .empty-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
   background: #a5cf68;
 }
 </style>

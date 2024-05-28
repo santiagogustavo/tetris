@@ -8,7 +8,6 @@ import ZBlockPng from '@/assets/imgs/zblock.png';
 
 <style lang="scss">
 .z-block {
-  width: 2rem;
-  height: 2rem;
+  @extend .block;
 }
 </style>
