@@ -29,5 +29,6 @@ const handleRetry = () => {
   justify-content: center;
   flex-direction: column;
   background: #0007;
+  z-index: 999;
 }
 </style>

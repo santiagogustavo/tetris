@@ -6,7 +6,7 @@
       @left="handleClickLeft"
       @right="handleClickRight"
     />
-    <Buttons @b="handleClickButtonB" />
+    <Buttons @b="handleClickButtonB" @a="handleClickButtonA" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@
 import Buttons from './Buttons.vue';
 import DPad from './DPad.vue';
 
-const emit = defineEmits(['up', 'down', 'left', 'right', 'b']);
+const emit = defineEmits(['up', 'down', 'left', 'right', 'b', 'a']);
 
 const handleClickUp = () => {
   emit('up');
@@ -34,6 +34,10 @@ const handleClickRight = () => {
 
 const handleClickButtonB = () => {
   emit('b');
+};
+
+const handleClickButtonA = () => {
+  emit('a');
 };
 </script>
 

@@ -40,6 +40,7 @@ const handleClickRight = () => {
 
 <style lang="scss">
 .controls-dpad {
+  padding: 0.5rem;
   &__row {
     display: flex;
   }
@@ -54,7 +55,22 @@ const handleClickRight = () => {
   &__button,
   &__center {
     position: relative;
-    background: #10121f;
+    background: $color-dpad;
+    user-select: none;
+  }
+
+  &__button {
+    cursor: pointer;
+    transform: translateY(-6px);
+    box-shadow: 0 6px $color-dpad-dark;
+    transition: transform 100ms ease, box-shadow 100ms ease;
+    &:active {
+      transform: translateY(0px);
+      box-shadow: 0 0px $color-dpad-dark;
+    }
+    &:hover {
+      background: $color-dpad-light;
+    }
   }
 
   &__center::after {
@@ -64,7 +80,7 @@ const handleClickRight = () => {
     left: 0.4rem;
     width: 1.75rem;
     height: 1.75rem;
-    background: #242633;
+    background: $color-dpad-lighter;
     border-radius: 50%;
   }
 

@@ -9,6 +9,7 @@
       @left="moveLeft"
       @right="moveRight"
       @b="rotate"
+      @a="moveDown"
     />
   </div>
 </template>
