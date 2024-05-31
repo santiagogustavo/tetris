@@ -16,27 +16,37 @@ import DPad from './DPad.vue';
 
 const emit = defineEmits(['up', 'down', 'left', 'right', 'b', 'a']);
 
+const tapVibrate = () => {
+  navigator?.vibrate([30]);
+};
+
 const handleClickUp = () => {
+  tapVibrate();
   emit('up');
 };
 
 const handleClickDown = () => {
+  tapVibrate();
   emit('down');
 };
 
 const handleClickLeft = () => {
+  tapVibrate();
   emit('left');
 };
 
 const handleClickRight = () => {
+  tapVibrate();
   emit('right');
 };
 
 const handleClickButtonB = () => {
+  tapVibrate();
   emit('b');
 };
 
 const handleClickButtonA = () => {
+  tapVibrate();
   emit('a');
 };
 </script>

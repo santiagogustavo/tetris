@@ -41,11 +41,13 @@ const handleClickButtonA = () => {
     transform: translateY(-6px);
     box-shadow: 0px 6px $color-button-dark;
     transition: transform 100ms ease, box-shadow 100ms ease;
+    -webkit-tap-highlight-color: transparent;
     &:focus {
       outline: none;
       background: $color-button;
     }
     &:active {
+      outline: none;
       transform: translateY(0px);
       box-shadow: 0px 0px $color-button-dark;
     }
