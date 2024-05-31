@@ -64,6 +64,10 @@ const handleClickRight = () => {
     transform: translateY(-6px);
     box-shadow: 0 6px $color-dpad-dark;
     transition: transform 100ms ease, box-shadow 100ms ease;
+    &:focus {
+      outline: none;
+      background: $color-dpad;
+    }
     &:active {
       transform: translateY(0px);
       box-shadow: 0 0px $color-dpad-dark;

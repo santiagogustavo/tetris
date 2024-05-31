@@ -41,6 +41,10 @@ const handleClickButtonA = () => {
     transform: translateY(-6px);
     box-shadow: 0px 6px $color-button-dark;
     transition: transform 100ms ease, box-shadow 100ms ease;
+    &:focus {
+      outline: none;
+      background: $color-button;
+    }
     &:active {
       transform: translateY(0px);
       box-shadow: 0px 0px $color-button-dark;
