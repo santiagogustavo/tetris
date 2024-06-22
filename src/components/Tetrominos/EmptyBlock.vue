@@ -5,6 +5,6 @@
 <style lang="scss">
 .empty-block {
   @extend .block;
-  background: #a5cf68;
+  background: $color-gb6;
 }
 </style>

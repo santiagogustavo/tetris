@@ -1,7 +1,13 @@
 <template>
   <div class="game-header">
-    <div class="game-header__rows">ROWS: {{ score }}</div>
-    <div class="game-header__level">LEVEL: {{ level }}</div>
+    <div class="game-header__rows">
+      <div class="game-header__title">ROWS</div>
+      <div class="game-header__subtitle">{{ score }}</div>
+    </div>
+    <div class="game-header__level">
+      <div class="game-header__title">LEVEL</div>
+      <div class="game-header__subtitle">{{ level }}</div>
+    </div>
   </div>
 </template>
 
@@ -17,7 +23,19 @@ const level = computed(() => useGameStore().level);
 .game-header {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  &__rows,
+  &__level {
+    margin: 24px 0px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+  &__subtitle {
+    text-align: right;
+  }
 }
 </style>

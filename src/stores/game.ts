@@ -9,6 +9,7 @@ export const BOARD_BOTTOM_CONSTRAINT = 17;
 type State = {
   board: any;
   currentBlock?: any;
+  nextBlock?: any;
   rotation: number;
   positionX: number;
   positionY: number;
@@ -22,6 +23,7 @@ export const useGameStore = defineStore({
   state: (): State => ({
     board: createMatrix(18, 10),
     currentBlock: undefined,
+    nextBlock: undefined,
     rotation: 0,
     positionX: 0,
     positionY: 0,
@@ -41,6 +43,9 @@ export const useGameStore = defineStore({
       this.rotation = 0;
       this.positionX = this.board[0].length / 2;
       this.positionY = 0;
+    },
+    setNextBlock(block: any) {
+      this.nextBlock = block;
     },
     setGameOver(gameOver: boolean) {
       this.gameOver = gameOver;
